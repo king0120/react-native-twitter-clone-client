@@ -16,10 +16,10 @@ const Text = styled.Text`
   textAlign: center;
 `;
 
-export default function Welcome() {
+export default function Welcome () {
   return (
     <Root>
-      <Text>Welcome, if you see this that mean everything work!!!</Text>
+      <Text>Neat, if you see this that mean everything work!!!</Text>
     </Root>
-  )
+  );
 }

@@ -13,7 +13,7 @@ if (UIManager.setLayoutAnimationEnabledExperimental) {
 }
 
 export default class App extends React.Component {
-  render() {
+  render () {
     return (
       <ApolloProvider store={store} client={client}>
         <ThemeProvider theme={colors}>
