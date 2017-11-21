@@ -7,14 +7,34 @@ const Root = styled.View`
   backgroundColor: #f2f2f2;
   flex: 1;
   justify-content: center;
-  align-items: center
+  align-items: center;
+  paddingTop: 40
 `;
+
+const List = styled.ScrollView``;
 
 class HomeScreen extends Component {
   render () {
     return (
       <Root>
-        <FeedCard />
+        <List>
+          <FeedCard />
+          <FeedCard />
+          <FeedCard />
+          <FeedCard />
+          <FeedCard />
+          <FeedCard />
+          <FeedCard />
+          <FeedCard />
+          <FeedCard />
+          <FeedCard />
+          <FeedCard />
+          <FeedCard />
+          <FeedCard />
+          <FeedCard />
+          <FeedCard />
+        </List>
+        
       </Root>
     );
   }
