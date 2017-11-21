@@ -8,7 +8,6 @@ const Root = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
-  paddingTop: 40
 `;
 
 const List = styled.ScrollView``;
