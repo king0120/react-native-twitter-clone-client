@@ -8,6 +8,7 @@ const Root = styled.View`
   minHeight: 180;
   backgroundColor: ${props => props.theme.WHITE};
   width: 100%;
+  alignSelf: stretch;
   padding: 7px;
   shadowColor: ${props => props.theme.SECONDARY};
   shadowOffset: 0 2px;
@@ -27,17 +28,16 @@ const CardContentText = styled.Text`
   color: ${props => props.theme.SECONDARY}
 `;
 
-const text = 'Lorem ipsum dolor, sit amet consectetur. Lorem ipsum dolor, sit amet consectetur. Lorem ipsum dolor, sit amet consectetur';
-const FeedCard = () => {
+const FeedCard = ({text, createdAt, user, favoriteCount}) => {
   return (
     <Root>
-      <FeedCardHeader/>
+      <FeedCardHeader createdAt={createdAt} {...user} />
       <CardContentContainer>
         <CardContentText>
           {text}
         </CardContentText>
       </CardContentContainer>
-      <FeedCardBottom />
+      <FeedCardBottom favoriteCount={favoriteCount} />
     </Root>
   );
 };

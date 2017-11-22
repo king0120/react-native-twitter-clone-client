@@ -1,9 +1,12 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 
 const AVATAR_SIZE = 40;
 const AVATAR_RADIUS = AVATAR_SIZE/2;
+
 const AVATAR = "https://pbs.twimg.com/profile_images/897192565363154947/OIQGaywa_bigger.jpg";
+
 const Root = styled.View`
   height: 50;
   flex-direction: row;
@@ -54,24 +57,24 @@ const MetaText = styled.Text`
   color: ${props => props.theme.LIGHT_GRAY}
 `;
 
-const FeedCardHeader = () => {
+const FeedCardHeader = ({avatar, firstName, lastName, username, createdAt}) => {
   return (
     <Root>
       <AvatarContainer>
-        <Avatar source={{uri: AVATAR}}/>
+        <Avatar source={{uri: avatar || AVATAR}}/>
       </AvatarContainer>
       <MetaContainer>
         <MetaTopContainer>
           <MetaFullName>
-            Jamie King
+            {firstName} {lastName}
           </MetaFullName>
           <MetaText style={{marginLeft: 5}}>
-            @jamieking
+            @{username}
           </MetaText>
         </MetaTopContainer>
         <MetaBottomContainer>
           <MetaText>
-            2 Days Ago
+            {distanceInWordsToNow(createdAt)} ago
           </MetaText>
         </MetaBottomContainer>
       </MetaContainer>

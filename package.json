@@ -4,13 +4,15 @@
   "description": "Hello Expo!",
   "author": null,
   "scripts": {
-    "start": "exp start"
+    "start": "exp start",
+    "debug": "open \"rndebugger://set-debugger-loc?host=localhost&port=19001\""
   },
   "private": true,
   "main": "node_modules/expo/AppEntry.js",
   "dependencies": {
     "@appandflow/touchable": "^1.2.2",
     "apollo-client": "1.9.0-0",
+    "date-fns": "^1.29.0",
     "expo": "^19.0.0",
     "react": "16.0.0-alpha.12",
     "react-apollo": "^1.4.8",
