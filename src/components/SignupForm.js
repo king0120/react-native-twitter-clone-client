@@ -75,8 +75,22 @@ const Input = styled.TextInput.attrs({
 `;
 
 class SignupForm extends Component {
+  state = {
+    fullName: '',
+    email: '',
+    password: '',
+    username: ''
+  }
 
   onOutsidePress = () => Keyboard.dismiss();
+
+  onChangeText = (text, type) => this.setState({[type]: text});
+
+  checkIfDisabled () {
+    const {fullName, email, password, username} = this.state;
+
+    return (!fullName || !email || !password || !username);
+  }
 
   render () {
     return (
@@ -86,18 +100,33 @@ class SignupForm extends Component {
         </BackButton>
         <Wrapper>
           <InputWrapper>
-            <Input placeholder="Full Name" />
+            <Input
+              placeholder="Full Name"
+              autoCapitalize="words"
+              onChangeText={text => this.onChangeText(text, 'fullName')}
+            />
           </InputWrapper>
           <InputWrapper>
-            <Input placeholder="E-Mail" />
+            <Input
+              placeholder="E-Mail"
+              keyboardType="email-address"
+              onChangeText={text => this.onChangeText(text, 'email')}
+            />
           </InputWrapper>
           <InputWrapper>
-            <Input placeholder="Password" />
+            <Input
+              placeholder="Password"
+              secureTextEntry
+              onChangeText={text => this.onChangeText(text, 'password')}
+            />
           </InputWrapper>
           <InputWrapper>
-            <Input placeholder="Username" />
+            <Input
+              placeholder="Username"
+              onChangeText={text => this.onChangeText(text, 'username')}
+            />
           </InputWrapper>
-          <ButtonConfirm>
+          <ButtonConfirm disabled={this.checkIfDisabled()}>
             <ButtonConfirmText>
               Sign Up
             </ButtonConfirmText>
