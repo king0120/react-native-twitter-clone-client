@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components/native';
 import Touchable from '@appandflow/touchable';
+import SignupForm from '../components/SignupForm';
 
 const Root = styled.View`
   flex: 1;
@@ -44,7 +45,8 @@ const BottomTextContainer = styled.View`
 `;
 
 const Button = styled(Touchable).attrs({
-  feedback: 'opacity'
+  feedback: 'opacity',
+  hitSlop: {top: 20, bottom: 20, right: 20, left: 20}
 })`
   justifyContent: center;
   alignItems: center;
@@ -56,18 +58,31 @@ const ButtonLoginText = styled.Text`
   fontSize: 16;
 `;
 
+const initialState = {
+  showSignup: true,
+  showLogin: false
+};
 class AuthScreen extends Component {
-  state = {}
+  state = initialState
 
+  onShowSignupPress = () => this.setState({showSignup: true})
+  onBackPress = () => this.setState({...initialState})
   render () {
+    if (this.state.showSignup) {
+      return (
+        <Root>
+          <SignupForm onBackPress={this.onBackPress} />
+        </Root>
+      );
+    }
     return (
       <Root>
-        <ButtonLogin>
+        <ButtonLogin onPress={this.onShowSignupPress}>
           <ButtonText>Get Started</ButtonText>
         </ButtonLogin>
         <BottomTextContainer>
           <Button>
-          <ButtonLoginText> Already have an account? </ButtonLoginText>
+            <ButtonLoginText> Already have an account? </ButtonLoginText>
           </Button>
         </BottomTextContainer>
       </Root>
