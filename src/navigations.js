@@ -7,6 +7,7 @@ import HomeScreen from './screens/HomeScreen';
 import ExploreScreen from './screens/ExploreScreen';
 import NotificationsScreen from './screens/NotificationsScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import AuthScreen from './screens/AuthScreen';
 
 import {colors} from './utils/constants';
 
@@ -89,7 +90,9 @@ class AppNavigator extends Component {
       dispatch: this.props.dispatch,
       state: this.props.nav
     });
-
+    if (!this.props.user.isAuthenticated){
+      return <AuthScreen />
+    }
     return (
       <AppMainNav navigation={nav} />
     );
@@ -97,7 +100,8 @@ class AppNavigator extends Component {
 }
 
 export default connect(state => ({
-  nav: state.nav
+  nav: state.nav,
+  user: state.user
 }))(AppNavigator);
 
 export const router = AppMainNav.router;
