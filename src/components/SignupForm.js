@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
 import styled from 'styled-components/native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Platform, Keyboard } from 'react-native';
+import { Platform, Keyboard, AsyncStorage } from 'react-native';
 import Touchable from '@appandflow/touchable';
 import { colors } from '../utils/constants';
+import {connect} from 'react-redux';
+import { graphql, compose } from 'react-apollo';
+import { login } from '../actions/user';
+import Loading from './Loading';
+
+import SIGNUP_MUTATION from '../graphql/mutations/signup';
 
 const Root = styled(Touchable).attrs({
   feedback: 'none'
@@ -81,7 +87,8 @@ class SignupForm extends Component {
     fullName: '',
     email: '',
     password: '',
-    username: ''
+    username: '',
+    loading: false
   }
 
   onOutsidePress = () => Keyboard.dismiss();
@@ -94,7 +101,34 @@ class SignupForm extends Component {
     return (!fullName || !email || !password || !username);
   }
 
+  onSignupPress = async () => {
+    this.setState({loading: true});
+    const { fullName, email, password, username } = this.state;
+    const avatar = 'http://www.fillmurray.com/100/100';
+
+    try {
+      const { data } = await this.props.mutate({
+        variables: {
+          fullName,
+          email,
+          password,
+          username,
+          avatar
+        }
+      });
+
+      await AsyncStorage.setItem('@twitteryoutubeclone', data.signup.token);
+      this.props.login();
+      return this.setState({loading: false});
+    } catch (err) {
+      throw err;
+    }
+  }
+
   render () {
+    if (this.state.loading) {
+      return <Loading />;
+    }
     return (
       <Root onPress={this.onOutsidePress}>
         <BackButton onPress={this.props.onBackPress}>
@@ -111,6 +145,7 @@ class SignupForm extends Component {
           <InputWrapper>
             <Input
               placeholder="E-Mail"
+              autoCapitalize="none"
               keyboardType="email-address"
               onChangeText={text => this.onChangeText(text, 'email')}
             />
@@ -128,7 +163,7 @@ class SignupForm extends Component {
               onChangeText={text => this.onChangeText(text, 'username')}
             />
           </InputWrapper>
-          <ButtonConfirm disabled={this.checkIfDisabled()}>
+          <ButtonConfirm onPress={this.onSignupPress} disabled={this.checkIfDisabled()}>
             <ButtonConfirmText>
               Sign Up
             </ButtonConfirmText>
@@ -139,4 +174,7 @@ class SignupForm extends Component {
   }
 }
 
-export default SignupForm;
+export default compose(
+  graphql(SIGNUP_MUTATION),
+  connect(undefined, { login })
+)(SignupForm);
