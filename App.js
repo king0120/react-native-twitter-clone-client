@@ -1,43 +1,43 @@
-import React from 'react';
+import React from 'react'
 import { AppLoading } from 'expo'
-import { UIManager, AsyncStorage } from 'react-native';
-import { ApolloProvider } from 'react-apollo';
-import { ThemeProvider } from 'styled-components';
+import { UIManager, AsyncStorage } from 'react-native'
+import { ApolloProvider } from 'react-apollo'
+import { ThemeProvider } from 'styled-components'
 
-import { store, client } from './src/store';
-import { colors } from './src/utils/constants';
-import { login } from './src/actions/user';
+import { store, client } from './src/store'
+import { colors } from './src/utils/constants'
+import { login } from './src/actions/user'
 
-import HomeScreen from './src/screens/HomeScreen';
-import AppNavigation from './src/navigations';
+import HomeScreen from './src/screens/HomeScreen'
+import AppNavigation from './src/navigations'
 
 if (UIManager.setLayoutAnimationEnabledExperimental) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
+  UIManager.setLayoutAnimationEnabledExperimental(true)
 }
 
 export default class App extends React.Component {
   state = {
     appReady: false
   }
-  componentDidMount () {
-    this.checkIfToken();
+  componentWillMount () {
+    this.checkIfToken()
   }
 
   checkIfToken = async () => {
     try {
-      const token = await AsyncStorage.getItem('@twitteryoutubeclone');
+      const token = await AsyncStorage.getItem('@twitteryoutubeclone')
       if (token) {
-        store.dispatch(login);
+        store.dispatch(login)
       }
     } catch (err) {
-      throw err;
+      throw err
     }
 
-    this.setState({appReady: true});
+    this.setState({appReady: true})
   }
 
   render () {
-    if (!this.state.appReady){
+    if (!this.state.appReady) {
       <AppLoading />
     }
     return (
@@ -46,6 +46,6 @@ export default class App extends React.Component {
           <AppNavigation />
         </ThemeProvider>
       </ApolloProvider>
-    );
+    )
   }
 }

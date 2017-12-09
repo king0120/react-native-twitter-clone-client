@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import styled from 'styled-components/native';
-import { MaterialIcons } from '@expo/vector-icons';
-import { Platform, Keyboard, AsyncStorage } from 'react-native';
-import Touchable from '@appandflow/touchable';
-import { colors } from '../utils/constants';
-import {connect} from 'react-redux';
-import { graphql, compose } from 'react-apollo';
-import { login } from '../actions/user';
-import Loading from './Loading';
+import React, { Component } from 'react'
+import styled from 'styled-components/native'
+import { MaterialIcons } from '@expo/vector-icons'
+import { Platform, Keyboard, AsyncStorage } from 'react-native'
+import Touchable from '@appandflow/touchable'
+import { colors } from '../utils/constants'
+import {connect} from 'react-redux'
+import { graphql, compose } from 'react-apollo'
+import { login } from '../actions/user'
+import Loading from './Loading'
 
-import SIGNUP_MUTATION from '../graphql/mutations/signup';
+import SIGNUP_MUTATION from '../graphql/mutations/signup'
 
 const Root = styled(Touchable).attrs({
   feedback: 'none'
@@ -17,7 +17,7 @@ const Root = styled(Touchable).attrs({
   flex: 1;
   position: relative;
   alignItems: center;
-`;
+`
 
 const Wrapper = styled.View`
   alignSelf: center;
@@ -25,7 +25,7 @@ const Wrapper = styled.View`
   justifyContent: center;
   width: 90%;
   height: 100%;
-`;
+`
 
 const BackButton = styled(Touchable).attrs({
   feedback: 'opacity',
@@ -37,7 +37,7 @@ const BackButton = styled(Touchable).attrs({
   top: 5%;
   left: 5%;
   zIndex: 1;
-`;
+`
 
 const ButtonConfirm = styled(Touchable).attrs({
   feedback: 'opacity'
@@ -55,12 +55,12 @@ const ButtonConfirm = styled(Touchable).attrs({
   shadowOffset: 0px 2px;
   shadowOpacity: 0.2;
   elevation: 2;
-`;
+`
 
 const ButtonConfirmText = styled.Text`
   color: ${props => props.theme.WHITE};
   fontWeight: 600;
-`;
+`
 
 const InputWrapper = styled.View`
   height: 50;
@@ -69,7 +69,7 @@ const InputWrapper = styled.View`
   borderBottomColor: ${props => props.theme.LIGHT_GRAY};
   marginVertical: 5;
   justifyContent: flex-end;
-`;
+`
 
 const Input = styled.TextInput.attrs({
   placeholderTextColor: colors.LIGHT_GRAY,
@@ -80,7 +80,7 @@ const Input = styled.TextInput.attrs({
   height: 30;
   width: 100%;
   color: ${props => props.theme.LIGHT_GRAY};
-`;
+`
 
 class SignupForm extends Component {
   state = {
@@ -96,15 +96,15 @@ class SignupForm extends Component {
   onChangeText = (text, type) => this.setState({[type]: text});
 
   checkIfDisabled () {
-    const {fullName, email, password, username} = this.state;
+    const {fullName, email, password, username} = this.state
 
-    return (!fullName || !email || !password || !username);
+    return (!fullName || !email || !password || !username)
   }
 
   onSignupPress = async () => {
-    this.setState({loading: true});
-    const { fullName, email, password, username } = this.state;
-    const avatar = 'http://www.fillmurray.com/100/100';
+    this.setState({loading: true})
+    const { fullName, email, password, username } = this.state
+    const avatar = 'http://www.fillmurray.com/100/100'
 
     try {
       const { data } = await this.props.mutate({
@@ -115,19 +115,21 @@ class SignupForm extends Component {
           username,
           avatar
         }
-      });
+      })
 
-      await AsyncStorage.setItem('@twitteryoutubeclone', data.signup.token);
-      this.props.login();
-      return this.setState({loading: false});
+      await AsyncStorage.setItem('@twitteryoutubeclone', data.signup.token)
+      const keys = await AsyncStorage.getAllKeys()
+      console.log(keys)
+      this.setState({loading: false})
+      return this.props.login()
     } catch (err) {
-      throw err;
+      throw err
     }
   }
 
   render () {
     if (this.state.loading) {
-      return <Loading />;
+      return <Loading />
     }
     return (
       <Root onPress={this.onOutsidePress}>
@@ -170,11 +172,11 @@ class SignupForm extends Component {
           </ButtonConfirm>
         </Wrapper>
       </Root>
-    );
+    )
   }
 }
 
 export default compose(
   graphql(SIGNUP_MUTATION),
   connect(undefined, { login })
-)(SignupForm);
+)(SignupForm)

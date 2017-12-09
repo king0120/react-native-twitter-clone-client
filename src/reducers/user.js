@@ -2,7 +2,7 @@ const initialState = {
 
   isAuthenticated: false,
   info: null
-};
+}
 
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -10,8 +10,8 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isAuthenticated: true
-      };
+      }
     default:
-      return state;
+      return state
   }
-};
+}
