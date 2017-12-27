@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { addNavigationHelpers, StackNavigator, TabNavigator } from 'react-navigation'
 import { connect } from 'react-redux'
-import { FontAwesome, SimpleLineIcons } from '@expo/vector-icons'
-
+import { FontAwesome, SimpleLineIcons, EvilIcons } from '@expo/vector-icons'
+import { Keyboard } from 'react-native'
 import HomeScreen from './screens/HomeScreen'
 import ExploreScreen from './screens/ExploreScreen'
 import NotificationsScreen from './screens/NotificationsScreen'
@@ -70,7 +70,18 @@ const Tabs = TabNavigator({
 
 const NewTweetModal = StackNavigator({
   NewTweet: {
-    screen: NewTweetScreen
+    screen: NewTweetScreen,
+    navigationOptions: ({ navigation }) => ({
+      headerLeft: <HeaderAvatar />,
+      headerRight: (
+        <ButtonHeader side="right" onPress={() => {
+          Keyboard.dismiss()
+          navigation.goBack(null)
+        }}>
+          <EvilIcons color={colors.PRIMARY} size={25} name="close"/>
+        </ButtonHeader>
+      )
+    })
   }
 }, {
   headerMode: 'none'
