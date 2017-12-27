@@ -11,7 +11,7 @@ const networkInterface = createNetworkInterface({
   uri: 'http://localhost:3000/graphql'
 })
 
-networkInterface.use([{
+networkInterface.use([ {
   async applyMiddleware (req, next) {
     if (!req.options.headers) {
       req.options.headers = {}
@@ -19,20 +19,23 @@ networkInterface.use([{
 
     try {
       const token = await AsyncStorage.getItem('@twitteryoutubeclone')
-      req.options.headers.authorization = `Bearer ${token}` || null
+      console.log(token)
+      if (token != null) {
+        req.options.headers.authorization = `Bearer ${token}` || null
+      }
     } catch (err) {
       throw err
     }
 
     return next()
   }
-}])
+} ])
 
 export const client = new ApolloClient({
   networkInterface
 })
 
-const middleware = [client.middleware(), thunk, createLogger()]
+const middleware = [ client.middleware(), thunk, createLogger() ]
 
 export const store = createStore(
   reducers(client),

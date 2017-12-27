@@ -1,15 +1,18 @@
 import React, { Component } from 'react'
 import { addNavigationHelpers, StackNavigator, TabNavigator } from 'react-navigation'
 import { connect } from 'react-redux'
-import { FontAwesome } from '@expo/vector-icons'
+import { FontAwesome, SimpleLineIcons } from '@expo/vector-icons'
 
 import HomeScreen from './screens/HomeScreen'
 import ExploreScreen from './screens/ExploreScreen'
 import NotificationsScreen from './screens/NotificationsScreen'
 import ProfileScreen from './screens/ProfileScreen'
+import NewTweetScreen from './screens/NewTweetScreen'
 import AuthScreen from './screens/AuthScreen'
+import HeaderAvatar from './components/HeaderAvatar'
+import ButtonHeader from './components/ButtonHeader'
 
-import {colors} from './utils/constants'
+import { colors } from './utils/constants'
 
 const Tabs = TabNavigator({
   Home: {
@@ -65,9 +68,28 @@ const Tabs = TabNavigator({
   }
 })
 
+const NewTweetModal = StackNavigator({
+  NewTweet: {
+    screen: NewTweetScreen
+  }
+}, {
+  headerMode: 'none'
+})
+
 const AppMainNav = StackNavigator({
   Home: {
-    screen: Tabs
+    screen: Tabs,
+    navigationOptions: ({ navigation }) => ({
+      headerLeft: <HeaderAvatar />,
+      headerRight: (
+        <ButtonHeader side="right" onPress={() => navigation.navigate('NewTweet')}>
+          <SimpleLineIcons color={colors.PRIMARY} size={20} name="pencil" />
+        </ButtonHeader>
+      )
+    })
+  },
+  NewTweet: {
+    screen: NewTweetModal
   }
 }, {
   cardStyle: {
@@ -90,6 +112,7 @@ class AppNavigator extends Component {
       dispatch: this.props.dispatch,
       state: this.props.nav
     })
+    console.log(this.props)
     if (!this.props.user.isAuthenticated) {
       return <AuthScreen />
     }

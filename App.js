@@ -3,6 +3,9 @@ import { AppLoading } from 'expo'
 import { UIManager, AsyncStorage } from 'react-native'
 import { ApolloProvider } from 'react-apollo'
 import { ThemeProvider } from 'styled-components'
+import {
+  ActionSheetProvider
+} from '@expo/react-native-action-sheet'
 
 import { store, client } from './src/store'
 import { colors } from './src/utils/constants'
@@ -27,13 +30,13 @@ export default class App extends React.Component {
     try {
       const token = await AsyncStorage.getItem('@twitteryoutubeclone')
       if (token) {
-        store.dispatch(login)
+        store.dispatch(login())
       }
     } catch (err) {
       throw err
     }
 
-    this.setState({appReady: true})
+    this.setState({ appReady: true })
   }
 
   render () {
@@ -42,9 +45,11 @@ export default class App extends React.Component {
     }
     return (
       <ApolloProvider store={store} client={client}>
-        <ThemeProvider theme={colors}>
-          <AppNavigation />
-        </ThemeProvider>
+        <ActionSheetProvider>
+          <ThemeProvider theme={colors}>
+            <AppNavigation />
+          </ThemeProvider>
+        </ActionSheetProvider>
       </ApolloProvider>
     )
   }
