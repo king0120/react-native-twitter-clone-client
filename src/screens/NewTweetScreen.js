@@ -1,8 +1,13 @@
 import React, { Component } from 'react'
 import styled from 'styled-components/native'
-import { Platform } from 'react-native'
+import { Platform, Keyboard } from 'react-native'
 import { colors } from '../utils/constants'
 import Touchable from '@appandflow/touchable'
+import { graphql, compose } from 'react-apollo'
+import { connect } from 'react-redux'
+
+import CREATE_TWEET_MUTATION from '../graphql/mutations/createTweet'
+import GET_TWEETS_QUERY from '../graphql/queries/getTweets'
 
 const Root = styled.View`
   backgroundColor: ${props => props.theme.WHITE};
@@ -64,9 +69,43 @@ class NewTweetScreen extends Component {
   }
   onChangeText = text => this.setState({ text })
 
+  onCreateTweetPress = async () => {
+    await this.props.mutate({
+      variables: {
+        text: this.state.text
+      },
+      optimisticResponse: {
+        __typename: 'Mutation',
+        createTweet: {
+          __typename: 'Tweet',
+          text: this.state.text,
+          favoriteCount: 0,
+          _id: Math.round(Math.random() * -1000000000),
+          createdAt: new Date(),
+          user: {
+            __typename: 'User',
+            ...this.props.user
+          }
+        }
+      },
+      update: (store, { data: { createTweet } }) => {
+        const data = store.readQuery({ query: GET_TWEETS_QUERY })
+        if (!data.getTweets.find(t => t._id === createTweet._id)) {
+          store.writeQuery({ query: GET_TWEETS_QUERY, data: { getTweets: [ { ...createTweet }, ...data.getTweets ] } })
+        }
+      }
+    })
+    Keyboard.dismiss()
+    this.props.navigation.goBack(null)
+  }
+
   get textLength () {
     console.log(this.state.text)
     return 140 - this.state.text.length
+  }
+
+  get buttonDisabled () {
+    return this.state.text.length < 5
   }
   render () {
     return (
@@ -76,7 +115,7 @@ class NewTweetScreen extends Component {
           <TextLength>
             {this.textLength}
           </TextLength>
-          <TweetButton>
+          <TweetButton onPress={this.onCreateTweetPress} disabled={this.buttonDisabled}>
             <TweetButtonText>
               Tweet
             </TweetButtonText>
@@ -87,4 +126,7 @@ class NewTweetScreen extends Component {
   }
 }
 
-export default NewTweetScreen
+export default compose(
+  graphql(CREATE_TWEET_MUTATION),
+  connect(state => ({ user: state.user.info }))
+)(NewTweetScreen)
